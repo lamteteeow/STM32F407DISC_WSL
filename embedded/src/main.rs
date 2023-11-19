@@ -1,11 +1,15 @@
+#![deny(unsafe_code)]
 #![no_main]
 #![no_std]
 
-// use cortex_m_rt::entry;
-use cortex_m_semihosting::hprintln;
-use panic_halt as _;
+use aux5::entry;
 
-fn main() {
-    hprintln!("Hello, world!");
-    // loop {}
+#[entry]
+fn main() -> ! {
+    let _y;
+    let x = 42;
+    _y = x;
+
+    // infinite loop; just so we don't leave this stack frame
+    loop {}
 }

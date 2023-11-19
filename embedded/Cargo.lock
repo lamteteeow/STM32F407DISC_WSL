@@ -104,7 +104,6 @@ version = "0.1.0"
 dependencies = [
  "cortex-m-rt",
  "cortex-m-semihosting",
- "panic-halt",
  "stm32f407g-disc",
 ]
 
@@ -179,12 +178,6 @@ checksum = "39e3200413f237f41ab11ad6d161bc7239c84dcb631773ccd7de3dfe4b5c267c"
 dependencies = [
  "autocfg",
 ]
-
-[[package]]
-name = "panic-halt"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de96540e0ebde571dc55c73d60ef407c653844e6f9a1e2fdbd40c07b9252d812"
 
 [[package]]
 name = "panic-itm"

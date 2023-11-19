@@ -139,7 +139,7 @@ Setting up tools:
     - In case of J-Link [debug probe from Segger]
         => No further action requires after udev rules are applied
         
-    - Add .cargo/config.toml to project folder, then add target config. This aims to use "cargo run" 
+    - Add .cargo/config.toml to project folder, then add target to config.toml (this file could be created within project as .cargo/config.toml). This aims to use "cargo run" 
         => Template:  [target.<architecture-triple>]
                       runner = "probe-rs run --chip <chip-name>"
     - Check all supported %PROCESSOR_ARCHITECTURE%:
@@ -154,9 +154,29 @@ Setting up tools:
         => [x86_64-unknown-linux-gnu] and [thumbv7em-none-eabihf] INSTALLED
         NOTE: This has supported target descriptions. 
               In case of not supported, write your own flash algorithm. Follow: https://github.com/probe-rs/flash-algorithm-template
-    - Check online for standard chip name:
+    - Check online for standard chip name, then add these to config.toml file :
         [target.thumbv7em-none-eabihf]
-        runner = "probe-rs run --chip <chip-name>" ??? <chip-name> ???
+        runner = "probe-rs run --chip <chip-name>" (chip-name is "STM32F407VGTx")
+
+
+Setup connection of USB devices to WSL: https://learn.microsoft.com/en-us/windows/wsl/connect-usb or https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/
+    - Use Windows package manager (winget) in cmd to run: 
+        => winget install --interactive --exact dorssel.usbipd-win
+        => Restart PC
+    - On Ubuntu terminal run to install the user space tools and a database of USB hardware identifiers: 
+        =>  sudo apt install linux-tools-generic hwdata
+        =>  sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/*-generic/usbip 20
+    - Keep WSL command line open to keep the WSL 2 lightweight VM active
+    - List all of the USB devices connected to Windows by opening PowerShell in ADMINISTRATOR mode and run in cmd:
+        => usbipd wsl list (for our microprocessor it should show "STM32 STLink")
+        => Remember the BUSID of selected USB device (here was "1-2")
+    - Attach that USB device to the default Linux WSL distribution (here Ubuntu):
+        => usbipd wsl attach --busid <busid> (here is "1-2")
+    - Go to WSL terminal and list all attached USB devices:
+        => lsusb
+    - For detaching, either physically do it or run this in cmd:
+        => usbipd wsl detach --busid <busid>
+    
 
 Optional:
     - Install Cargo "clone" subcommand: 
@@ -165,5 +185,18 @@ Optional:
         => cargo install cargo-edit
     - GDB: sudo apt-get install gdb-arm-none-eabi (on Ubuntu)
     - OpenOCD: sudo apt-get install OpenOCD (on Ubuntu)
+
+HUGE REALIZATION: STM32F407VG does not support Windows 11 ... So do its required drivers.
+Things were done that might need to be revised later:
+    - Drivers STSW-LINK009 was downloaded from https://www.st.com/en/development-tools/stsw-link009.html
+    - Ran and installed "stlink_winusb_install.bat" from that .zip folder
+    - Installed all .inf files from that .zip folder
+    - Now try out a correct Mini-USB cable to power up => UP YOU GO!!!
+
+NOW follow this book to learn embed in Rust https://docs.rust-embedded.org/discovery/f3discovery/03-setup/index.html
+=> Move to a new project name rust-embedded for this book
+=> This project here is for self implementing after learning the book
+
+
 
 
