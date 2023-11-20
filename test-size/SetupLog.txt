@@ -63,30 +63,36 @@ Verify permissions:
     - To modify into crw-rw----:
         => sudo chmod o+rw 002
             crw-rw-rw- 1 root plugdev 189, 1 Nov 19 02:46 002
+            (this step persists after detaching)
     - Change owner+group:
         => sudo chown <user>:<group> <file>
         => sudo chown :root 002 (for our purpose)
             crw-rw-rw- 1 root root 189, 1 Nov 19 02:46 002
+            (this step does not presists after detaching)
 
 Verify OCD connection:
+    - The interface directory is typically located in /usr/share/openocd/scripts/, which is the default location OpenOCD expects these files.
+    - If you've installed them somewhere else use the -s /path/to/scripts/ option to specify your install directory.
     
-    => openocd -f interface/stlink-v2-1.cfg -f target/stm32f4x.cfg (stlink-v2-1.cfg is deprecated)
-    => openocd -f interface/stlink.cfg -f target/stm32f4x.cfg
-        Open On-Chip Debugger 0.11.0
-        Licensed under GNU GPL v2
-        For bug reports, read
-                http://openocd.org/doc/doxygen/bugs.html
-        Info : auto-selecting first available session transport "hla_swd". To override use 'transport select <transport>'.
-        Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
-        Info : Listening on port 6666 for tcl connections
-        Info : Listening on port 4444 for telnet connections
-        Info : clock speed 2000 kHz
-        Info : STLINK V2J14S0 (API v2) VID:PID 0483:3748
-        Info : Target voltage: 2.892743
-        Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints
-        Info : starting gdb server for stm32f4x.cpu on 3333
-        Info : Listening on port 3333 for gdb connections
-        (option to open port 3333 in browser)
+        => openocd -f interface/stlink-v2-1.cfg -f target/stm32f4x.cfg (stlink-v2-1.cfg is deprecated)
+        => openocd -f interface/stlink.cfg -f target/stm32f4x.cfg
+            Open On-Chip Debugger 0.11.0
+            Licensed under GNU GPL v2
+            For bug reports, read
+                    http://openocd.org/doc/doxygen/bugs.html
+            Info : auto-selecting first available session transport "hla_swd". To override use 'transport select <transport>'.
+            Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
+            Info : Listening on port 6666 for tcl connections
+            Info : Listening on port 4444 for telnet connections
+            Info : clock speed 2000 kHz
+            Info : STLINK V2J14S0 (API v2) VID:PID 0483:3748
+            Info : Target voltage: 2.892743
+            Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints
+            Info : starting gdb server for stm32f4x.cpu on 3333
+            Info : Listening on port 3333 for gdb connections
+            (option to open port 3333 in browser)
+    - OpenOCD is a service which forwards debug information from the ITM channel to a file, itm.txt, 
+      as such it runs forever and does not return to the terminal prompt.
 
 Fixing Error from rust-analyzer "can't find crate for 'test' ":
     - Add config to /home/lamteteeow/.vscode/settings.json
@@ -143,7 +149,7 @@ FLASHHHHH:
             Info : Listening on port 3333 for gdb connections
     - Do not click VSCode pop-up to open browser on http://127.0.0.1:3333/
     - Leave that openocd process running
-    - In a new terminal inside the project's "src/test-size/" directory, run:
+    - In a new terminal inside the project's "/home/lamteteeow/STM32F4DISCOVERY_Rust/test-size/" directory, run:
         NOTE:    gdb -q -ex "target remote :3333" target/thumbv7em-none-eabihf/debug/test-size
              and arm-none-eabi-gdb -q -ex "target remote :3333" target/thumbv7em-none-eabihf/debug/test-size
              do not work on 
@@ -156,8 +162,7 @@ FLASHHHHH:
         => gdb-multiarch -q -ex "target extended-remote :3333" target/thumbv7em-none-eabihf/debug/test-size (remove Warn)
         => [q + Enter] to stop and quit gdb server, [y + Enter] to confirm
 
-Update ../.cargo/config.toml based on prior steps:
-    - Add runner config:
+    - Update ../.cargo/config.toml based on prior steps:
         =>  [target.thumbv7em-none-eabihf]
             runner = "arm-none-eabi-gdb -q -x ../openocd.gdb"
             # runner = "gdb-multiarch -q -x ../openocd.gdb"
@@ -169,4 +174,42 @@ Update ../.cargo/config.toml based on prior steps:
             [build]
             target = "thumbv7em-none-eabihf"
 
-Now we add linker script memory.x and "cargo run" to start debugging.
+    - Now we add linker script memory.x to project folder
+    - Open OpenOCD in 1 terminal:
+        => openocd -f interface/stlink.cfg -f target/stm32f4x.cfg
+    - Go to project foler:
+        => cargo run (to start debugging)
+    - Follow these steps: https://docs.rust-embedded.org/discovery/f3discovery/05-led-roulette/debug-it.html 
+    
+
+GDB CLI syntax:
+    - (gdb) "ENTER" = repeat last command
+    - (gdb) target remote :3333
+    - (gdb) load (flash the code)
+    - (gdb) set print asm-demangle on
+    - (gdb) set style sources off
+    - (gdb) break main / b main (??? break <fct> ???)
+    - (gdb) continue / c
+    - (gdb) disassemble /m
+    - (gdb) monitor reset halt
+    - (gdb) step / s
+    - (gdb) info locals
+    - (gdb) print <var> / p <var>
+    - (gdb) l <line#>
+    - (gdb) d (delete all breakpoints)
+    - (gdb) stepi / si
+    - (gdb) quit / q
+    - For better TUI:
+        => (gdb) layout src (or asm or split)
+        => (gdb) tui disable (to exit TUI)
+
+Add-on to GDB CLI : gdb-dashboard -> https://github.com/cyrus-and/gdb-dashboard#gdb-dashboard
+It uses Python to turn the default GDB CLI into a dashboard that shows registers, the source view, the assembly view and other things.
+    - wget -P ~ https://git.io/.gdbinit (at /home)
+    - pip install pygments (for syntax highlighting)
+
+Tips:
+    - Clear out memory:
+        => cargo clean
+        => cargo-cache -a (to clear the ~/.cargo folder, first => cargo install cargo-cache)
+        => cargo-cache --remove-dir all ()
