@@ -2,21 +2,17 @@
 #![no_std]
 
 // use panic_halt as _;
-use core::panic::PanicInfo;
-
-use stm32f407g_disc as board;
-
 use crate::board::{
     hal::delay::Delay,
     hal::prelude::*,
     hal::stm32,
     led::{LedColor, Leds},
 };
-
-// use cortex_m::delay::Delay;
+use core::panic::PanicInfo;
 use cortex_m::peripheral::Peripherals;
-
 use cortex_m_rt::entry;
+use stm32f407g_disc as board;
+use volatile::Volatile;
 
 #[entry]
 fn main() -> ! {
@@ -35,36 +31,35 @@ fn main() -> ! {
         // Get delay provider // clock does not work therefore delay_ms has no effect
         let mut delay = Delay::new(cp.SYST, clocks);
 
-        // let mut delay =
+        let mut one_sec: u16 = 1000;
+        let v_one_sec = Volatile::new(&mut one_sec);
 
         loop {
             // Turn LEDs on one after the other with 1000ms delay between them
             leds[LedColor::Orange].on();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Red].on();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Blue].on();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Green].on();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
 
-            // Delay twice for half a second due to limited timer resolution
-            delay.delay_ms(1000_u32);
-            delay.delay_ms(1000_u32);
+            // delay.delay_ms(v_one_sec.read());
+            // delay.delay_ms(v_one_sec.read());
 
             // Turn LEDs off one after the other with 1000ms delay between them
             leds[LedColor::Orange].off();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Red].off();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Blue].off();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
             leds[LedColor::Green].off();
-            delay.delay_ms(1000_u32);
+            delay.delay_ms(v_one_sec.read());
 
-            // Delay twice for half a second due to limited timer resolution
-            delay.delay_ms(1000_u32);
-            delay.delay_ms(1000_u32);
+            // delay.delay_ms(v_one_sec.read());
+            // delay.delay_ms(v_one_sec.read());
         }
     }
 

@@ -7,10 +7,10 @@ target = ["thumbv7em-none-eabihf"]
 # runner = "probe-rs run --chip STM32F407VGTx"
 
 # default runner starts a GDB sesssion, which requires OpenOCD to be running, e.g. :
-## openocd -f interface/stlink.cfg -f target/stm32f3x.cfg
+## openocd -f interface/stlink.cfg -f target/stm32f4x.cfg
 [target.thumbv7em-none-eabihf]
 # runner = "arm-none-eabi-gdb -q -x ../openocd.gdb"
-runner = "gdb-multiarch -q -x /home/lamteteeow/.cargo/registry/src/index.crates.io-6f17d22bba15001f/stm32f407g-disc-0.4.1/openocd.gdb"
+runner = "gdb-multiarch -q -x ./openocd.gdb"
 # runner = "gdb -q -x ../openocd.gdb"
 
 rustflags = [

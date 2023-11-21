@@ -164,8 +164,8 @@ FLASHHHHH:
 
     - Update ../.cargo/config.toml based on prior steps:
         =>  [target.thumbv7em-none-eabihf]
-            runner = "arm-none-eabi-gdb -q -x ../openocd.gdb"
-            # runner = "gdb-multiarch -q -x ../openocd.gdb"
+            # runner = "arm-none-eabi-gdb -q -x ../openocd.gdb"
+            runner = "gdb-multiarch -q -x ../openocd.gdb"
             # runner = "gdb -q -x ../openocd.gdb"
             rustflags = [
               "-C", "link-arg=-Tlink.x",
@@ -190,18 +190,25 @@ GDB CLI syntax:
     - (gdb) set style sources off
     - (gdb) break main / b main (??? break <fct> ???)
     - (gdb) continue / c
+    - (gdb) finish
     - (gdb) disassemble /m
     - (gdb) monitor reset halt
-    - (gdb) step / s
+    - (gdb) step / s (step in)
+    - (gdb) next / n (step over)
     - (gdb) info locals
+    - (gdb) info args
+    - (gdb) backtrace / bt
     - (gdb) print <var> / p <var>
+    - (gdb) set <var> = <value>
     - (gdb) l <line#>
+    - (gdb) f (print current line we are on)
     - (gdb) d (delete all breakpoints)
     - (gdb) stepi / si
     - (gdb) quit / q
     - For better TUI:
         => (gdb) layout src (or asm or split)
         => (gdb) tui disable (to exit TUI)
+    - MORE: https://docs.rust-embedded.org/discovery/f3discovery/appendix/2-how-to-use-gdb/
 
 Add-on to GDB CLI : gdb-dashboard -> https://github.com/cyrus-and/gdb-dashboard#gdb-dashboard
 It uses Python to turn the default GDB CLI into a dashboard that shows registers, the source view, the assembly view and other things.
@@ -213,3 +220,8 @@ Tips:
         => cargo clean
         => cargo-cache -a (to clear the ~/.cargo folder, first => cargo install cargo-cache)
         => cargo-cache --remove-dir all ()
+    - Copy openocd.gdb to local project folder:
+        => /home/lamteteeow/.cargo/registry/src/index.crates.io-6f17d22bba15001f/stm32f407g-disc-0.4.1/openocd.gdb
+    - Set config.toml file:
+        => [target.thumbv7em-none-eabihf]
+           runner = "gdb-multiarch -q -x ./openocd.gdb"
