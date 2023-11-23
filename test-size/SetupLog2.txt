@@ -220,8 +220,13 @@ Tips:
         => cargo clean
         => cargo-cache -a (to clear the ~/.cargo folder, first => cargo install cargo-cache)
         => cargo-cache --remove-dir all ()
-    - Copy openocd.gdb to local project folder:
+    - Copy openocd.gdb and openocd.cfg to local project folder (was not installed in project folder):
         => /home/lamteteeow/.cargo/registry/src/index.crates.io-6f17d22bba15001f/stm32f407g-disc-0.4.1/openocd.gdb
-    - Set config.toml file:
+        => /home/lamteteeow/.cargo/registry/src/index.crates.io-6f17d22bba15001f/stm32f407g-disc-0.4.1/openocd.cfg
+      Then set config.toml file:
         => [target.thumbv7em-none-eabihf]
            runner = "gdb-multiarch -q -x ./openocd.gdb"
+    - Check binary file size after compile (in release mode):
+        => cargo size --target thumbv7em-none-eabihf --bin main --release -- -A
+
+# Next doc: /home/lamteteeow/STM32F4DISCOVERY_Rust/test-size/SetupLog3.txt

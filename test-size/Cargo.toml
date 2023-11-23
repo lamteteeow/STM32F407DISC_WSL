@@ -13,3 +13,11 @@ lis302dl = "0.1.0"
 stm32f407g-disc = "0.4.1"
 stm32f4xx-hal = "0.9.0"
 volatile = "0.4.3"
+
+[[bin]]
+name = "test_size_bin"
+path = "src/led.rs"
+
+[lib]
+name = "test_size_lib"
+path = "src/lib.rs"
