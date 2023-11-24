@@ -197,7 +197,7 @@ NOW follow this book to learn embed in Rust https://docs.rust-embedded.org/disco
 => Move to a new project name rust-embedded for this book
 => This project here is for self implementing after learning the book
 
-# Next doc: /home/lamteteeow/STM32F4DISCOVERY_Rust/test-size/SetupLog.txt
+# Next doc: /home/lamteteeow/STM32F4DISCOVERY_Rust/test-size/SetupLog2.txt
 
 
 

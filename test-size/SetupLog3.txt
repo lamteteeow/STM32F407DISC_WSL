@@ -20,4 +20,6 @@ Tips:
                                            Peripheral Access Crate (PAC) -> ADC, GPIO, Memory, I2C, SPI, USB, ... => (stm32f407g_disc)
 
 
-    -  
+    - By default: cargo build will create bin in <project>/target/<target>/debug [first target is emulator system, here is Linux (Ubuntu WSL), not Windows]
+    - By default: cargo build --manifest-path <path>, Cargo searches for the Cargo.toml file in the current directory or any PARENT directory.
+    - Some important options: --target, --release, --examples/--example <example>, --tests/--test <test>, --bins/--bin <bin>, --lib

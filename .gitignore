@@ -1,12 +1,13 @@
 **/target
 *.pdf
+*.txt
 
 # Ignore Board Support and Device Support Pack download file from ST for STM32F407VG
 Keil.STM32F4xx_DFP.2.17.1.pack
 
 # Ignore gdb input history file as well as gdb server log file
 .gdb_history
-itm.txt
+
 
 # Ignore Cargo.lock
 *.lock

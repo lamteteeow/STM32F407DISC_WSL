@@ -3,6 +3,9 @@ name = "test-size"
 version = "0.1.0"
 edition = "2021"
 
+# [workspace]
+# members = ["dummy", "led"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -15,9 +18,13 @@ stm32f4xx-hal = "0.9.0"
 volatile = "0.4.3"
 
 [[bin]]
-name = "test_size_bin"
-path = "src/led.rs"
+name = "led"
+path = "src/bin/led.rs"
+
+[[bin]]
+name = "dummy"
+path = "src/bin/dummy.rs"
 
 [lib]
-name = "test_size_lib"
+name = "lib"
 path = "src/lib.rs"
