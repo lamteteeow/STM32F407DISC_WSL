@@ -31,7 +31,7 @@ fn main() -> ! {
     // let pins: PINS<I2C> = (scl, sda);
 
     // Setup I2C1 using PB6/PB7 at 400kHz bitrate (fast mode)
-    let i2c = I2c::new(dp.I2C1, (scl, sda), 200.khz(), clocks);
+    let i2c = I2c::new(dp.I2C1, (scl, sda), 400.khz(), clocks);
 
     // rprintln!("I2C initialized");
 
