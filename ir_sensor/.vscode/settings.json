@@ -1,0 +1,7 @@
+{
+    // "rust-analyzer.checkOnSave.allTargets": false, // as default in user config
+    "rust-analyzer.checkOnSave.extraArgs": [
+        "--target",
+        "thumbv7em-none-eabihf"
+    ],
+}

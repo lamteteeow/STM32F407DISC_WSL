@@ -1,7 +1,0 @@
-[build]
-target = ["thumbv7em-none-eabihf"]
-# target = ["thumbv7em-none-eabihf", "x86_64-unknown-linux-gnu"]
-
-# probe-run
-[target.thumbv7em-none-eabihf]
-runner = "probe-rs run --chip STM32F407VGTx"

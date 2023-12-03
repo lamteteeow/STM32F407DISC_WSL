@@ -2,16 +2,15 @@
 #![no_std]
 
 // use panic_halt as _;
-use crate::board::{
+use core::panic::PanicInfo;
+use cortex_m::peripheral::Peripherals;
+use cortex_m_rt::entry;
+use stm32f407g_disc::{
     hal::delay::Delay,
     hal::prelude::*,
     hal::stm32,
     led::{LedColor, Leds},
 };
-use core::panic::PanicInfo;
-use cortex_m::peripheral::Peripherals;
-use cortex_m_rt::entry;
-use stm32f407g_disc as board;
 use volatile::Volatile;
 
 #[entry]
@@ -23,7 +22,7 @@ fn main() -> ! {
         let mut leds = Leds::new(gpiod);
 
         // Constrain clock registers
-        let rcc = p.RCC.constrain();
+        let rcc = p.RCC.constrain(); //=> need to check Reset and Clock Control (RCC) in STM32F407 Reference Manual
 
         // Configure clock to 168 MHz (i.e. the maximum) and freeze it
         let clocks = rcc.cfgr.sysclk(168.mhz()).freeze();

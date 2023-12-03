@@ -13,17 +13,22 @@ accelerometer = "0.11.0"
 cortex-m = "0.7.2"
 cortex-m-rt = "0.6.13"
 lis302dl = "0.1.0"
+panic-itm = "0.4.2"
 stm32f407g-disc = "0.4.1"
 stm32f4xx-hal = "0.9.0"
 volatile = "0.4.3"
 
 [[bin]]
-name = "led"
-path = "src/bin/led.rs"
+name = "blinky_led_hal"
+path = "src/bin/blinky_led_hal.rs"
 
 [[bin]]
 name = "dummy"
 path = "src/bin/dummy.rs"
+
+[[bin]]
+name = "hello_itm"
+path = "src/bin/hello_itm.rs"
 
 [lib]
 name = "lib"
