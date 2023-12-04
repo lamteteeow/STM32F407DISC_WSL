@@ -1,4 +1,5 @@
 [package]
+authors = ["Lam"]
 name = "ir_sensor"
 version = "0.1.0"
 edition = "2021"
@@ -8,6 +9,9 @@ edition = "2021"
 [dependencies]
 cortex-m = "0.7.7"
 cortex-m-rt = "0.6.13"
+mlx9061x = "0.2.1"
 panic-rtt-target = { version = "0.1.2", features = ["cortex-m"] }
-rtt-target = "0.4.0"
+rtt-target = { version = "0.3.1", features = [
+    "cortex-m",
+] } #0.4.0 can not specify feature flag
 stm32f407g-disc = "0.4.1"

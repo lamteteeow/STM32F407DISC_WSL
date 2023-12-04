@@ -11,6 +11,6 @@ target = ["thumbv7em-none-eabihf"]
 # modify link to openocd.gdb base on where to execute cargo run
 [target.thumbv7em-none-eabihf]
 # runner = "arm-none-eabi-gdb -q -x ../openocd.gdb"
-runner = "gdb-multiarch -q -x ../openocd.gdb"
+runner = "gdb-multiarch -q -x openocd.gdb"
 # runner = "gdb -q -x ../openocd.gdb"
 rustflags = ["-C", "link-arg=-Tlink.x"]
