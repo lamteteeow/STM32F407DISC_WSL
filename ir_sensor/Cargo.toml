@@ -10,8 +10,16 @@ edition = "2021"
 cortex-m = "0.7.7"
 cortex-m-rt = "0.6.13"
 mlx9061x = "0.2.1"
+panic-probe = { version = "0.3.1", features = ["print-rtt"] }
 panic-rtt-target = { version = "0.1.2", features = ["cortex-m"] }
-rtt-target = { version = "0.3.1", features = [
-    "cortex-m",
-] } #0.4.0 can not specify feature flag
+rtt-target = { version = "0.3.1", features = ["cortex-m"] }
+#0.4.0 can not specify feature flag
+# panic-rtt-target = { version = "0.1.2", features = ["cortex-m"] }
 stm32f407g-disc = "0.4.1"
+
+# Cargo.toml
+[profile.dev]
+debug = 1 # default is `true`; not needed if not already overridden
+
+[profile.release]
+debug = 1 # default is `false`; using `true` is also OK as symbols reside on the host, not the target
