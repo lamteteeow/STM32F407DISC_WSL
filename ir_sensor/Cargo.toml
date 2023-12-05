@@ -23,3 +23,8 @@ debug = 1 # default is `true`; not needed if not already overridden
 
 [profile.release]
 debug = 1 # default is `false`; using `true` is also OK as symbols reside on the host, not the target
+
+
+[[bin]]
+name = "ir_sensor"
+path = "src/ir_sensor.rs"

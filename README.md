@@ -11,5 +11,5 @@ Peripherals:
 
 - Memory IC for UID using EEPROM - part SN: 25AA02UID-I/SN
 - MicroSD from DFROBOT - part SN: DFR0229
-- Infra red thermometer from Olimex - part SN: MOD-IR-TEMP
+- Infra red thermometer from Olimex - part SN: MOD-IR-TEMP (mlx9061x = "0.2.1")
 - to be added
