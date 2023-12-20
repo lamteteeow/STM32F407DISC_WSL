@@ -2,6 +2,8 @@
 #![no_std]
 #![no_main]
 
+use core::panic;
+
 use board::hal::{delay::Delay, i2c::*, prelude::*, stm32}; // PAC = peripheral access crate, here equal stm32
 use cortex_m::Peripherals;
 use cortex_m_rt::entry;
@@ -32,33 +34,19 @@ fn main() -> ! {
     let scl = gpiob.pb6.into_alternate_af4_open_drain();
     let sda = gpiob.pb7.into_alternate_af4_open_drain();
 
-    // scl.internal_pull_up(true);
-    // sda.internal_pull_up(true);
-
     // Setup I2C1 using PB6/PB7 at 400kHz bitrate (fast mode)
-    let i2c = I2c::new(
-        dp.I2C1,
-        // cortex_m::interrupt::free(move |cs| {
-        //     (
-        //         gpiob.pb6.into_alternate_af4_open_drain(cs),
-        //         gpiob.pb7.into_alternate_af4_open_drain(cs),
-        //     )
-        // }),
-        (scl, sda),
-        400.khz(),
-        clocks,
-    );
+    let i2c = I2c::new(dp.I2C1, (scl, sda), 400.khz(), clocks);
     rprintln!("I2C initialized");
 
-    let addr = SlaveAddr::default();
+    let addr = SlaveAddr::Alternative(0x5A << 1);
+    // let addr = SlaveAddr::Default;
     rprintln!("Slave address: {:?}", addr);
 
-    let mut sensor = Mlx9061x::new_mlx90614(i2c, addr, 5).unwrap();
-    // if let Err(err) = maybe_sensor {
-    //     rprintln!("I2C error: {:?}", err);
-    //     loop {}
-    // }
-    // let mut sensor = maybe_sensor.unwrap();
+    let maybe_sensor = Mlx9061x::new_mlx90614(i2c, addr, 5);
+    if let Err(err) = maybe_sensor {
+        panic!("I2C error: {:?}", err);
+    }
+    let mut sensor = maybe_sensor.unwrap();
 
     if let Ok(id) = sensor.device_id() {
         rprintln!("Device ID: {}", id);
@@ -67,8 +55,8 @@ fn main() -> ! {
     }
 
     loop {
-        if let Ok(obj_temp) = sensor.object1_temperature_as_int() {
-            rprintln!("Object temperature: {}ºC", obj_temp);
+        if let Ok(obj_temp) = sensor.object1_temperature() {
+            rprintln!("Object temperature: {:.3}ºC", obj_temp);
         } else {
             // panic!("Read object error");
             rprintln!("Read object error.");
@@ -78,9 +66,11 @@ fn main() -> ! {
         // } else {
         //     rprintln!("Read ambient error.");
         // }
+
         // // let t = sensor.read_u16(Register::TA)?;
         // let t_obj = sensor.object1_temperature().unwrap_or(-1.0);
         // rprintln!("Object temperature: {:.2}ºC", t_obj);
+
         // scl.toggle().unwrap();
         // delay.delay_ms(1000_u16);
         // delay.delay_ms(1000_u16);
