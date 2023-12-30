@@ -17,7 +17,7 @@ Setting up dependencies:
     - Installing Crate cargo-embed:
     => `cargo install cargo-embed`
     + Failed due to package libudev (Linux device manager) was not installed beforehand in WSL
-    => `sudo apt-get install libudev-dev`
+    => `sudo apt-get install libudev-dev`c
     => Rerun => Worked! (for some issues on Github you might want to try: `cargo install --locked cargo-embed`)
     + For Windows, use crate "vcpkg"
         # dynamic linking 64-bit
